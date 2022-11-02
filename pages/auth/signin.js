@@ -4,7 +4,7 @@ import { getSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { gerSession } from 'next-auth/react'
 import Link from 'next/link'
-import Logo from '../../src/components/Layout/logo/Logo'
+import Logo from '../../src/components/Layout/Logo/Logo'
 export default function Home() {
   const [isChecking, setIsChecking] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
