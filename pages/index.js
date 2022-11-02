@@ -1,209 +1,69 @@
-import Head from 'next/head'
-
-export default function Home() {
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { HiPlusCircle } from 'react-icons/hi2'
+import Auth from '../src/components/Templates/Auth/Auth'
+import SmallVehicle from '../src/components/Vehicle/SmallVehicle'
+import { useRef, useState, useEffect } from 'react'
+import { getSession } from 'next-auth/react'
+import { fetchData } from 'next-auth/client/_utils'
+export default function Home(props) {
+  const [isLoading, setIsLoading] = useState(true)
+  const [vehicles, setVehicles] = useState([])
+  const router = useRouter()
+  useEffect(() => {
+    getSession().then((session) => {
+      if (!session) {
+        router.replace('/auth/signin')
+      }
+    })
+  }, [router])
+  useEffect( () => {
+    const fetchVehicles = async () => {
+      const response = await fetch('/api/vehicle/list')
+      const data = await response.json()
+      setVehicles(data.vehicles)
+      setIsLoading(false)
+    }
+    fetchVehicles()
+  }, [])
+    
   return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    <Auth>
+      <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ml-4 mr-4">
+        <div class="p-6 bg-white border-b ">
+          <div class="flex flex-row">
+            <div class="basis-1/2">
+              <span>Portfolio: </span>
+              <span class="text-emerald-500 bg-emerald-500/5 text-sm px-3 py-2 inline-flex gap-2 items-center justify-center">
+                <span class="font-mono">Rs. 61,334.00</span>
+              </span>
+            </div>
+            <div class="basis-1/2 align-middle text-center ">
+              <Link
+                href={'/vehicle/add'}
+                class="text-red-400 bg-white hover:bg-red-100 border border-red-200 focus:ring-4 focus:outline-none focus:ring-red-100 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center dark:focus:ring-red-600 dark:bg-red-600 dark:border-red-500 dark:text-white dark:hover:bg-red-500 mr-2 mb-2"
+              >
+                Add Vehicle
+              </Link>
+            </div>
+          </div>
         </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+      </div>
+      <br />
+      {isLoading && 'Loading...'}
+      {!isLoading &&
+        vehicles.map((vehicle) => {
+          return (
+            <div class="flex flex-wrap flex-gap-3 justify-center">
+              <Link
+                href="/"
+                class="p-4 cursor-pointer hover:scale-105 transition duration-300 ease-in-out"
+              >
+                <SmallVehicle vehicle={vehicle} />
+              </Link>
+            </div>
+          )
+        })}
+    </Auth>
   )
 }
