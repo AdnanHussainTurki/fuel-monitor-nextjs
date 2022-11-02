@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useSession, getSession, signOut } from 'next-auth/react'
 
 import { useEffect, useState } from 'react'
-import Logo from '../logo/Logo'
+import Logo from '../Logo/Logo'
 import { app } from '../../../config/app'
 export default function NavBar() {
   const { data: session, status } = useSession()
