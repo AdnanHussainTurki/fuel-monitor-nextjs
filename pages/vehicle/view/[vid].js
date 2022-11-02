@@ -9,30 +9,22 @@ import Bike from '../../../src/components/Svg/Bike'
 import Graph from '../../../src/components/Svg/Graph'
 
 export default function add() {
-  const [vehicle, setVehicle] = useState({
-    "_id": "63619a52cba3979d4dd5ce4e",
-    "brand": "Royal Enfield",
-    "model": "Classic 350",
-    "user_email": "adnanhussainturki@gmail.com",
-    "createdAt": "2022-11-01T22:14:42.059Z",
-    "type": "Motor Cycle"
-})
+  const [vehicle, setVehicle] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { vid } = router.query
-  console.log(vid)
-  // useEffect(() => {
-  //   if (vid === undefined) {
-  //     return
-  //   }
-  //   const fetchVehicle = async () => {
-  //     const response = await fetch('/api/vehicle/view?vid=' + vid)
-  //     const data = await response.json()
-  //     setVehicle(data.vehicle)
-  //     setIsLoading(false)
-  //   }
-  //   fetchVehicle()
-  // }, [vid])
+  useEffect(() => {
+    if (vid === undefined) {
+      return
+    }
+    const fetchVehicle = async () => {
+      const response = await fetch('/api/vehicle/view?vid=' + vid)
+      const data = await response.json()
+      setVehicle(data.vehicle)
+      setIsLoading(false)
+    }
+    fetchVehicle()
+  }, [vid])
   return (
     <Auth>
       {isLoading ? (

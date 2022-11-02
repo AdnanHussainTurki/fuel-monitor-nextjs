@@ -39,8 +39,8 @@ export default function Refuel() {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
-          <div class="p-6  bg-white border-b ">
+        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
+          <div className="p-6  bg-white border-b ">
             <FuelHandle className="h-10 mb-2 fill-red-500" />
 
             <p>
@@ -57,8 +57,8 @@ export default function Refuel() {
               >
                 Spendings
               </label>
-              <div class="relative mb-6">
-                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+              <div className="relative mb-6">
+                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <BsCash />
                 </div>
                 <input
@@ -80,8 +80,8 @@ export default function Refuel() {
               >
                 Rate/Litre
               </label>
-              <div class="relative mb-6">
-                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+              <div className="relative mb-6">
+                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <BsCash />
                 </div>
                 <input
@@ -103,7 +103,7 @@ export default function Refuel() {
               >
                 Refueling on
               </label>
-              <div class="relative mb-6">
+              <div className="relative mb-6">
     
                 <input
                   dir="rtl"
