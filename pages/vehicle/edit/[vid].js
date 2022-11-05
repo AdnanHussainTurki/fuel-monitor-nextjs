@@ -8,6 +8,7 @@ import CurrencyStore from '../../../src/stores/CurrencyStore'
 import Creatable from 'react-select/creatable'
 import Select from 'react-select'
 import { ImPencil2, ImBin } from 'react-icons/im'
+import Loading from '../../../src/components/Layout/Loading/Loading'
 
 async function fetchBrands() {
     const cars = BrandsStore.useState((s) => s.cars)
@@ -200,7 +201,7 @@ export default function edit() {
     return (
         <Auth>
             {isLoading ? (
-                <p>Loading...</p>
+                <Loading/>
             ) : (
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
                     <div className="p-6  bg-white border-b ">

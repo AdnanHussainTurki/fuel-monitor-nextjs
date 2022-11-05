@@ -9,6 +9,7 @@ import Bike from "../../../src/components/Svg/Bike";
 import Graph from "../../../src/components/Svg/Graph";
 import RefuelStrip from "../../../src/components/Refuel/RefuelStrip";
 import { FaPencilAlt } from "react-icons/fa";
+import Loading from "../../../src/components/Layout/Loading/Loading";
 
 export default function add() {
   const [vehicle, setVehicle] = useState({});
@@ -39,7 +40,7 @@ export default function add() {
   return (
     <Auth>
       {isLoading ? (
-        <p>Loading...</p>
+        <Loading/>
       ) : (
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
           <div class="p-6  bg-white border-b ">
@@ -81,7 +82,7 @@ export default function add() {
             </div>
            
           </div>
-          { isRefuelLoading && <p>Loading...</p>}
+          { isRefuelLoading && <Loading withoutText={true}/>}
           { !isRefuelLoading && <RefuelStrip refuels={refuels}/>}
         </div>
       )}

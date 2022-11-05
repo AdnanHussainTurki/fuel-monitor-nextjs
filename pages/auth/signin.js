@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { gerSession } from 'next-auth/react'
 import Link from 'next/link'
 import Logo from '../../src/components/Layout/Logo/Logo'
+import Loading from '../../src/components/Layout/Loading/Loading'
 export default function Home() {
   const [isChecking, setIsChecking] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -22,7 +23,7 @@ export default function Home() {
   }, [router])
 
   if (isLoading) {
-    return <p className="center">Loading...</p>
+    return <Loading/>
   }
   const submitHandler = async (event) => {
     event.preventDefault()

@@ -9,6 +9,7 @@ import Truck from "../../../src/components/Svg/Truck";
 import FuelHandle from "../../../src/components/Svg/FuelHandle";
 import Bike from "../../../src/components/Svg/Bike";
 import Graph from "../../../src/components/Svg/Graph";
+import Loading from "../../../src/components/Layout/Loading/Loading";
 
 async function doRefuel(
   vid,
@@ -90,7 +91,7 @@ export default function Refuel() {
   return (
     <Auth>
       {isLoading ? (
-        <p>Loading...</p>
+        <Loading/>
       ) : (
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
           <div className="p-6  bg-white border-b ">

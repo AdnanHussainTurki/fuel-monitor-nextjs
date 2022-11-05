@@ -5,6 +5,8 @@ import { useSession, getSession, signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
 import { app } from '../../../config/app'
+import {BsFillGrid3X3GapFill} from 'react-icons/bs'
+
 export default function NavBar() {
   const { data: session, status } = useSession()
 
@@ -19,7 +21,7 @@ export default function NavBar() {
     console.log('openMobile', openMobile)
   }, [openMobile])
   if (status === 'loading') {
-    return <p>Loading...</p>
+    return
   }
 
   if (status === 'unauthenticated') {
@@ -50,9 +52,9 @@ export default function NavBar() {
             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
               <Link
                 className="inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out"
-                href="/"
+                href={"/"}
               >
-                Dashboard
+                The Garage
               </Link>
             </div>
           </div>
@@ -113,7 +115,7 @@ export default function NavBar() {
               }}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
             >
-              [==]
+              <BsFillGrid3X3GapFill/>
             </button>
           </div>
         </div>
@@ -121,12 +123,12 @@ export default function NavBar() {
 
       <div className={`${openMobile ? '' : 'hidden'} sm:hidden`}>
         <div className="pt-2 pb-3 space-y-1">
-          <a
+          <Link
             className="block pl-3 pr-4 py-2 border-l-4 border-indigo-400 text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700 transition duration-150 ease-in-out"
-            href="https://ledger.myphpnotes.com/dashboard"
+            href="/"
           >
-            Dashboard
-          </a>
+            The Garage
+          </Link>
         </div>
 
         <div className="pt-4 pb-1 border-t border-gray-200">
@@ -152,4 +154,19 @@ export default function NavBar() {
       </div>
     </nav>
   )
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req })
+  if (!session) {
+      return {
+          redirect: {
+              destination: '/auth/signin',
+              permanent: false,
+          },
+      }
+  }
+  return {
+      props: { session },
+  }
 }

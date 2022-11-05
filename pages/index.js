@@ -6,6 +6,7 @@ import SmallVehicle from '../src/components/Vehicle/SmallVehicle'
 import { useRef, useState, useEffect } from 'react'
 import { getSession } from 'next-auth/react'
 import { fetchData } from 'next-auth/client/_utils'
+import Loading from '../src/components/Layout/Loading/Loading'
 export default function Home(props) {
   const [isLoading, setIsLoading] = useState(true)
   const [vehicles, setVehicles] = useState([])
@@ -50,7 +51,7 @@ export default function Home(props) {
         </div>
       </div>
       <br />
-      {isLoading && 'Loading...'}
+      {isLoading && <Loading/>}
       {!isLoading &&
         vehicles.map((vehicle) => {
           return (
