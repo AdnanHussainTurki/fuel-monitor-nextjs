@@ -64,6 +64,26 @@ export default function Home(props) {
             </div>
           )
         })}
+      {!isLoading &&
+        vehicles.length == 0 && (
+          <Link href={'/vehicle/add'} class="flex flex-wrap flex-gap-3 justify-center">
+            <div class="p-4 cursor-pointer hover:scale-105 transition duration-300 ease-in-out">
+              <div class="flex justify-center">
+                <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+                  <HiPlusCircle className="h-6 fill-red-500" />
+                  <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">
+                    <span class="text-red-600 text-xl font-bold">Add</span>{' '}
+                    Vehicle
+                  </h5>
+                  <p class="text-gray-700 text-base">
+                    Add your first vehicle to get started.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
+
     </Auth>
   )
 }
