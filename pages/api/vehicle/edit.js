@@ -1,12 +1,15 @@
+import { ObjectId } from 'mongodb'
 import { getSession } from 'next-auth/react'
 import { connectToDatabase } from '../../../lib/mongodb'
 
 async function handler(req, res) {
     if (req.method !== 'POST') {
+        res.status(405)
         return
     }
     const data = req.body
     const {
+        vid,
         brand,
         model,
         type,
@@ -16,6 +19,7 @@ async function handler(req, res) {
         fuelType,
     } = data
     if (
+        !vid ||
         !brand ||
         !model ||
         !type ||
@@ -37,29 +41,32 @@ async function handler(req, res) {
     const userEmail = session.user.email
     const client = await connectToDatabase()
     const db = await client.db()
-    const existingUser = await db
+    const existing = await db
         .collection('vehicles')
-        .findOne({ brand: brand, model: model, user_email: userEmail })
-    if (existingUser) {
-        res.status(422).json({ message: 'Vehicle exists already!' })
+        .findOne({ _id: ObjectId(vid), user_email: userEmail })
+    if (!existing) {
+        res.status(422).json({ message: 'Vehicle not found!' })
         client.close()
         return
     }
 
-    await db
-        .collection('vehicles')
-        .insertOne({
-            brand: brand,
-            model: model,
-            user_email: userEmail,
-            type: type,
-            currency: currency,
-            fuelCapacity: fuelCapacity,
-            fuelReserve: fuelReserve,
-            fuelType: fuelType,
-            createdAt: new Date(),
-        })
+    await db.collection('vehicles').updateOne(
+        { _id: ObjectId(vid) },
+        {
+            $set: {
+                brand: brand,
+                model: model,
+                user_email: userEmail,
+                type: type,
+                currency: currency,
+                fuelCapacity: fuelCapacity,
+                fuelReserve: fuelReserve,
+                fuelType: fuelType,
+                createdAt: new Date(),
+            },
+        }
+    )
     client.close()
-    res.status(201).json({ message: 'Created vehicle!' })
+    res.status(201).json({ message: 'Vehicle edited!' })
 }
 export default handler

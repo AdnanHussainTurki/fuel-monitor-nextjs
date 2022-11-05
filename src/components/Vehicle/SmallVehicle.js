@@ -8,7 +8,7 @@ export default function (props) {
     <div className="flex justify-center">
       <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
         { (props.vehicle.type == "Car") ? <Car className="h-6 fill-red-500" /> : "" }
-        { (props.vehicle.type == "Motor Cycle") ? <Bike className="h-6 fill-red-500" /> : "" }
+        { (props.vehicle.type == "Bike" || props.vehicle.type == "Motor Cycle" ) ? <Bike className="h-6 fill-red-500" /> : "" }
         { (! props.vehicle.type ) ? <Truck className="h-6 fill-red-500" /> : "" }
         <h5 className="text-gray-900 text-xl leading-tight font-medium mb-2">
         <span className="text-red-600 text-xl font-bold">
