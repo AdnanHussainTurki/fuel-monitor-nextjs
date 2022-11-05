@@ -26,9 +26,7 @@ export default function Home() {
     getSession().then((session) => {
       if (session) {
         router.replace('/profile/view')
-      } else {
-        setIsLoading(false)
-      }
+      } 
     })
   }, [router])
   const moveToLogin = () => {
