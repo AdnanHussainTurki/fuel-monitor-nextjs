@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
 import { getSession } from 'next-auth/react';
 import Simple from '../../src/components/Templates/Simple/Simple'
+import Link from 'next/link';
+import Logo from '../../src/components/Layout/Logo/Logo';
 async function createUser(name, email, password) {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
@@ -50,6 +52,27 @@ export default function Home() {
   }
   return (
     <Simple>
+            <div>
+                <div className="shrink-0  items-center">
+                    <Link href="/">
+                        <span className="block">
+                            <Logo className="p-2 m-3 w-auto" />
+                        </span>
+                    </Link>
+                </div>
+                <div className="shrink-0  items-center  ">
+                    <Link href="/">
+                        <p>
+                            <span className=" text-6xl text-red-600 font-bold">
+                                Fuel
+                            </span>{' '}
+                            <span className=" text-6xl font-semibold">
+                                Monitor
+                            </span>
+                        </p>
+                    </Link>
+                </div>
+            </div>
       <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
         <form onSubmit={submitHandler}>
           <div>
@@ -61,6 +84,7 @@ export default function Home() {
             </label>
 
             <input
+              placeholder='Bob'
               ref={nameInputRef}
               className="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
               id="name"
@@ -80,6 +104,7 @@ export default function Home() {
             </label>
 
             <input
+              placeholder='bob@somwhere.com'
               ref={emailInputRef}
               className="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1  p-2 w-full"
               id="email"
@@ -101,27 +126,10 @@ export default function Home() {
               ref={passwordInputRef}
               className="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
               id="password"
-              type="password"
+              type="text"
               name="password"
               required="required"
               autocomplete="new-password"
-            />
-          </div>
-
-          <div className="mt-4">
-            <label
-              className="block font-large text-sm text-gray-700"
-              for="password_confirmation"
-            >
-              Confirm Password
-            </label>
-
-            <input
-              className="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1  p-2 w-full"
-              id="password_confirmation"
-              type="password"
-              name="password_confirmation"
-              required="required"
             />
           </div>
 
