@@ -27,7 +27,7 @@ export default function Home() {
   useEffect(() => {
     getSession().then((session) => {
       if (session) {
-        router.replace('/profile/view')
+        router.replace('/')
       } 
     })
   }, [router])
