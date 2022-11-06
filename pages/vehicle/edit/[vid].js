@@ -9,6 +9,7 @@ import Creatable from 'react-select/creatable'
 import Select from 'react-select'
 import { ImPencil2, ImBin } from 'react-icons/im'
 import Loading from '../../../src/components/Layout/Loading/Loading'
+import VehicleStore from '../../../src/stores/VehicleStore'
 
 async function fetchBrands() {
     const cars = BrandsStore.useState((s) => s.cars)
@@ -42,10 +43,11 @@ export default function edit() {
     const [fuelTypeJson, setFuelTypeJson] = useState(null)
     const [fuelCapacity, setFuelCapacity] = useState(null)
     const [fuelReserve, setFuelReserve] = useState(null)
-
+    
     const cars = BrandsStore.useState((s) => s.cars)
     const bikes = BrandsStore.useState((s) => s.bikes)
     const currencies = CurrencyStore.useState((s) => s.currencies)
+    const vehicleStore = VehicleStore.useState((s) => s)
 
     const [brandOptions, setBrandOptions] = useState([])
     const [currencyOptions, setCurrencyOptions] = useState([])
@@ -173,6 +175,21 @@ export default function edit() {
             setIsAdding(false)
             return
         }
+        VehicleStore.update((s) => {
+            s.vehicles = s.vehicles.map((vehicle) => {
+                if (vehicle._id === vid) {
+                    vehicle.brand = enteredBrand
+                    vehicle.model = enteredModel
+                    vehicle.type = enteredType
+                    vehicle.currency = enteredCurrency
+                    vehicle.fuelType = enteredFuelType
+                    vehicle.fuelCapacity = enteredFuelCapacity
+                    vehicle.fuelReserve = enteredFuelReserve
+                }
+                return vehicle
+            })
+        })
+        
         setIsAdding(false)
         router.replace('/vehicle/view/' + vid)
     }
@@ -195,9 +212,26 @@ export default function edit() {
             setIsDeleting(false)
             return
         }
+        VehicleStore.update((s) => {
+            s.vehicles = s.vehicles.filter((vehicle) => vehicle._id !== vid);
+        })
+        if (vehicleStore.refuels[vid]) {
+            RefuelStore.update((s) => {
+                s.refuels = s.refuels.filter(
+                    (refuel) => refuel.data.vid !== vid
+                )
+            })
+        }
+        
         setIsDeleting(false)
         router.replace('/')
     }
+    useEffect(() => {
+        if (isLoading == false && vehicle == null) {
+            router.replace('/')
+        }
+    }, [isLoading, vehicle])
+
     return (
         <Auth>
             {isLoading ? (
@@ -438,3 +472,18 @@ export default function edit() {
         </Auth>
     )
 }
+export async function getServerSideProps(context) {
+    const session = await getSession({ req: context.req })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/signin',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: { session },
+    }
+  }
+  

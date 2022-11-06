@@ -5,9 +5,9 @@ export default function (props) {
   return (
     <div class="p-4 w-auto bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg">
       <div class="flex justify-between items-center mb-4">
-        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">{props.refuels.length == 0 ? "No Refuel History" : "Refuels"}</h5>
+        <h5 class="text-xl font-bold leading-none text-white">{props.refuels.length == 0 ? "No Refuel History" : "Refuels"}</h5>
       </div>
-
+      {props.refuels.length > 0 ? <hr/> : ""}
       <div class="flow-root">
         <ul role="list" class="">
           {props.refuels.map((refuel, key) => {
@@ -18,7 +18,7 @@ export default function (props) {
                   <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
                       <div class="inline-flex overflow-hidden relative justify-center items-center w-10 h-10 bg-white-100 rounded-lg dark:bg-white">
-                        <span class="text-[13px] text-center ">{format(new Date(refuel.refuel_on), "D MMM YYYY")} </span>
+                        <span class="text-[13px] leading-[.8rem] text-center uppercase text-red-400  ">{format(new Date(refuel.refuel_on), "D MMM YYYY")} </span>
                       </div>
                     </div>
                     <div class="flex-1 min-w-0">
@@ -32,7 +32,7 @@ export default function (props) {
                         <span className="cursor-pointer">Edit</span>
                       </span>
                     </div>
-                    <div class="inline-flex items-center text-base font-semibold font-mono text-gray-900 dark:text-white">$ {refuel.spending}</div>
+                    <div class="inline-flex items-center text-base font-semibold font-mono text-gray-900 dark:text-white">{props.vehicle.currency} {parseFloat(refuel.spending).toFixed(2)}</div>
                   </div>
                 </li>
                 {previousRefuel?.meter_reading && (

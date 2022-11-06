@@ -18,9 +18,10 @@ export default function (props) {
               <span className="font-bold text-xl">{props.vehicle.model}</span>
            
         </h5>
-        <p className="text-gray-700 text-base mb-4">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+        <p className="text-gray-700 text-sm mb-4">
+          You may  <span class="text-blue-500 bg-blue-300/5 text-xs px-3 py-2 inline-flex gap-2 items-center justify-center">
+                        <span class="font-mono">{props.vehicle.currency}</span>
+                    </span> paid for this vehicle this month.
         </p>
         <Link
           href={`vehicle/view/${props.vehicle._id}`}

@@ -38,7 +38,7 @@ async function handler(req, res) {
     return;
   }
 
-  await db
+  const refuel = await db
     .collection("refuels")
     .insertOne({
       vid: ObjectId(vid),
@@ -47,9 +47,10 @@ async function handler(req, res) {
       rate_per_litre,
       refuel_on,
       percent_before_refuel,
+      user_email: userEmail,
       created_at: new Date(),
     });
   client.close();
-  res.status(201).json({ message: "Refueled!" });
+  res.status(201).json({ message: "Refueled!", refuel: refuel});
 }
 export default handler;

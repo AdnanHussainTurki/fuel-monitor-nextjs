@@ -39,7 +39,7 @@ export default function Home() {
     setIsChecking(false)
     console.log(result)
     if (!result.error) {
-      router.replace('/profile/view')
+      router.replace('/')
     }
   }
   return (
@@ -61,7 +61,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+      <div class="w-11/12 sm:max-w-md mt-6 px-6 m-10 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
         <form onSubmit={submitHandler}>
           <input
             type="hidden"

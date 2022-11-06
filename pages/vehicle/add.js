@@ -8,6 +8,7 @@ import CurrencyStore from '../../src/stores/CurrencyStore'
 import Creatable from 'react-select/creatable'
 import Select from 'react-select'
 import Loading from '../../src/components/Layout/Loading/Loading'
+import VehicleStore from '../../src/stores/VehicleStore'
 
 async function fetchBrands() {
     const cars = BrandsStore.useState((s) => s.cars)
@@ -100,6 +101,19 @@ export default function add() {
             setIsAdding(false)
             return
         }
+        const addedVehicle = (await result.json()).vehicle;
+        VehicleStore.update((s) => {
+            s.vehicles = [...s.vehicles,{
+                _id: addedVehicle.insertedId,
+                brand: enteredBrand,
+                model: enteredModel,
+                type: enteredType,
+                currency: enteredCurrency,
+                fuelType: enteredFuelType,
+                fuelCapacity: enteredFuelCapacity,
+                fuelReserve: enteredFuelReserve,
+            } ]
+        })
         setIsAdding(false)
         router.replace('/')
     }

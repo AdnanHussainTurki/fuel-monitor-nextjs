@@ -16,7 +16,8 @@ async function handler(req, res) {
   const vehicles = await db
     .collection('vehicles')
     .find({ user_email: userEmail })
-    .sort({ createdAt: -1 }).toArray();
+    .sort({ createdAt: -1 })
+    .toArray();
   client.close()
   res.status(201).json({ message: 'Vehicles Pulled!', vehicles: vehicles, email: userEmail })
 }

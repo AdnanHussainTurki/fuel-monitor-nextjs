@@ -46,7 +46,7 @@ async function handler(req, res) {
         return
     }
 
-    await db
+    const vehicle = await db
         .collection('vehicles')
         .insertOne({
             brand: brand,
@@ -60,6 +60,6 @@ async function handler(req, res) {
             createdAt: new Date(),
         })
     client.close()
-    res.status(201).json({ message: 'Created vehicle!' })
+    res.status(201).json({ message: 'Created vehicle!', vehicle: vehicle })
 }
 export default handler
