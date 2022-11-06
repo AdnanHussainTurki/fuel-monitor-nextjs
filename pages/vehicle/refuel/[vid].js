@@ -11,6 +11,7 @@ import Bike from '../../../src/components/Svg/Bike'
 import Graph from '../../../src/components/Svg/Graph'
 import Loading from '../../../src/components/Layout/Loading/Loading'
 import VehicleStore from '../../../src/stores/VehicleStore'
+import { getSession } from 'next-auth/react'
 
 async function doRefuel(
     vid,
