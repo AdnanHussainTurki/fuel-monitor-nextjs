@@ -17,8 +17,8 @@ export default function (props) {
                 <li class="py-3 sm:py-4">
                   <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
-                      <div class="inline-flex overflow-hidden relative justify-center items-center w-10 h-10 bg-white-100 rounded-lg dark:bg-white">
-                        <span class="text-[13px] leading-[.8rem] text-center uppercase text-red-400  ">{format(new Date(refuel.refuel_on), "D MMM YYYY")} </span>
+                      <div class="inline-flex overflow-hidden relative justify-center items-center w-10 h-10 bg-white-100 rounded-lg">
+                        <span class="text-[13px] leading-[.8rem] text-center uppercase text-white  ">{format(new Date(refuel.refuel_on), "D MMM YYYY")} </span>
                       </div>
                     </div>
                     <div class="flex-1 min-w-0">
