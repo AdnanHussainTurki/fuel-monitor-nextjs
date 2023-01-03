@@ -6,7 +6,7 @@ export default function Auth(props) {
     <div className="">
       <CustomHead />
       <NavBar />
-      <main className="min-h-screen bg-gray-100">
+      <main className="min-h-screen bg-gray-700">
         <div class="py-12">
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {props.children}

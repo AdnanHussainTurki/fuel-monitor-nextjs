@@ -1,13 +1,19 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useSession, getSession, signOut } from 'next-auth/react'
+import { useWeb3React } from '@web3-react/core'
 
 import { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
 import { app } from '../../../config/app'
-import {BsFillGrid3X3GapFill} from 'react-icons/bs'
+import { BsFillGrid3X3GapFill } from 'react-icons/bs'
+import { walletLogin } from '../../../utils/account'
+import withWalletSelectModal from './withWalletSelectModal'
+import withIsMobile from './withIsMobile'
 
-export default function NavBar() {
+const NavBar = ({ showLogin, connect }) => {
+  const { activate, active } = useWeb3React()
+  const [userAlreadyConnectedWallet, setUserAlreadyConnectedWallet] = useState(false)
   const { data: session, status } = useSession()
 
   const [navbar, setNavbar] = useState(false)
@@ -25,12 +31,25 @@ export default function NavBar() {
   }
 
   if (status === 'unauthenticated') {
-    return 
+    return
   }
   function logoutHandler() {
     signOut();
   }
-  console.log(session)
+
+  useEffect(() => {
+    if (
+      !userAlreadyConnectedWallet &&
+      localStorage.getItem('userConnectedWallet') === 'true'
+    ) {
+      setUserAlreadyConnectedWallet(true)
+    }
+
+    if (!userAlreadyConnectedWallet && active) {
+      localStorage.setItem('userConnectedWallet', 'true')
+    }
+  }, [active])
+
   return (
     <nav x-data="{ open: false }" className="bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +58,7 @@ export default function NavBar() {
             <div className="shrink-0  items-center">
               <Link href="/">
                 <span className='block'>
-                <Logo className="p-2 m-3 w-auto" /> 
+                  <Logo className="p-2 m-3 w-auto" />
                 </span>
               </Link>
             </div>
@@ -60,9 +79,8 @@ export default function NavBar() {
           </div>
           {session && (
             <div
-              className={`${
-                open ? '' : 'hidden'
-              } sm:flex sm:items-center sm:ml-6 hidden xs:block`}
+              className={`${open ? '' : 'hidden'
+                } sm:flex sm:items-center sm:ml-6 hidden xs:block`}
             >
               <div className="relative">
                 <div
@@ -72,16 +90,15 @@ export default function NavBar() {
                   }}
                 >
                   <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                    <div>{session.user.name? session.user.name : "Unnamed"}</div>
+                    <div>{session.user.name ? session.user.name : "Unnamed"}</div>
 
                     <div className="ml-1"></div>
                   </button>
                 </div>
 
                 <div
-                  className={`${
-                    open ? '' : 'hidden'
-                  }  absolute z-50 mt-2 w-48 rounded-md shadow-lg origin-top-right right-0`}
+                  className={`${open ? '' : 'hidden'
+                    }  absolute z-50 mt-2 w-48 rounded-md shadow-lg origin-top-right right-0`}
                   onClick={() => {
                     setOpen(!open)
                   }}
@@ -115,7 +132,7 @@ export default function NavBar() {
               }}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
             >
-              <BsFillGrid3X3GapFill/>
+              <BsFillGrid3X3GapFill />
             </button>
           </div>
         </div>
@@ -134,10 +151,10 @@ export default function NavBar() {
         <div className="pt-4 pb-1 border-t border-gray-200">
           <div className="px-4">
             <div className="font-medium text-base text-gray-800">
-            {session.user.name? session.user.name : "Unnamed"}
+              {session.user.name ? session.user.name : "Unnamed"}
             </div>
             <div className="font-medium text-sm text-gray-500">
-            {session.user.email? session.user.email : "No Email :("}
+              {session.user.email ? session.user.email : "No Email :("}
             </div>
           </div>
 
@@ -159,14 +176,16 @@ export default function NavBar() {
 export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req })
   if (!session) {
-      return {
-          redirect: {
-              destination: '/auth/signin',
-              permanent: false,
-          },
-      }
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    }
   }
   return {
-      props: { session },
+    props: { session },
   }
 }
+
+export default withIsMobile(withWalletSelectModal(NavBar))
