@@ -24,9 +24,9 @@ export default function (props) {
                     </div>
                     <div class="flex-1 min-w-0">
                       <p class="text-sm  font-mono font-medium text-gray-900 truncate dark:text-white">
-                        {refuel.meter_reading} KM {previousRefuel?.meter_reading ? "- " + previousRefuel.meter_reading + " KM" : ""}
+                        {refuel.meter_reading} KM {previousRefuel?.meter_reading && refuel.continued ? "- " + previousRefuel.meter_reading + " KM" : ""}
                       </p>
-                      {previousRefuel?.meter_reading && <span class=" text-white  font-medium rounded-sm text-[12px] pr-2 py-1 text-center inline-flex items-center  mr-2 mb-2"> {"Run: " + (refuel.meter_reading - previousRefuel.meter_reading) + " KM"} </span>}
+                      {previousRefuel?.meter_reading && refuel.continued && <span class=" text-white  font-medium rounded-sm text-[12px] pr-2 py-1 text-center inline-flex items-center  mr-2 mb-2"> {"Run: " + (refuel.meter_reading - previousRefuel.meter_reading) + " KM"} </span>}
                       {refuel.rate_per_litre && <span class=" text-white  font-medium rounded-sm text-[12px] pr-2 py-1 text-center inline-flex items-center  mr-2 mb-2"> {"Fuel Rate: Rs. " + parseFloat(refuel.rate_per_litre).toFixed(2)} </span>}
                       {refuel.spending && <span class=" text-white  font-medium rounded-sm text-[12px] pr-2 py-1 text-center inline-flex items-center  mr-2 mb-2"> {"Litres: Rs. " + (parseFloat(refuel.spending) / parseFloat(refuel.rate_per_litre)).toFixed(2)} </span>}
                       <span class=" text-white bg-gradient-to-br from-pink-500 to-orange-400 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-sm text-[12px] px-2 py-1 text-center inline-flex items-center  mr-2 mb-2">
