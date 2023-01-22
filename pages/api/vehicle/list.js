@@ -1,4 +1,4 @@
-import { ObjectID } from 'bson'
+import { ObjectId, ObjectID } from 'bson'
 import { getSession } from 'next-auth/react'
 import { connectToDatabase } from '../../../lib/mongodb'
 
@@ -27,7 +27,7 @@ async function handler(req, res) {
       .aggregate([
         {
           '$match': {
-            'vid': ObjectID(vehicle._id),
+            'vid': ObjectId(vehicle._id),
           }
         }, {
           '$addFields': {
@@ -49,7 +49,7 @@ async function handler(req, res) {
       .aggregate([
         {
           '$match': {
-            'vid': ObjectID(vehicle._id),
+            'vid': ObjectId(vehicle._id),
           }
         }, {
           '$addFields': {
