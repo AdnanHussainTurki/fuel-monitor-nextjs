@@ -22,7 +22,7 @@ async function handler(req, res) {
   // Calculate the sum of all refuels for each vehicle
   for (let i = 0; i < vehicles.length; i++) {
     const vehicle = vehicles[i]
-    const cursor =  await db
+    const cursor = await db
       .collection('refuels')
       .aggregate([
         {
@@ -37,7 +37,7 @@ async function handler(req, res) {
           }
         }, {
           '$group': {
-            '_id': '$vid', 
+            '_id': '$vid',
             'totalSpending': {
               '$sum': '$spendingAsInt'
             }
@@ -47,10 +47,10 @@ async function handler(req, res) {
           '$limit': 1
         }
       ]).toArray()
-      console.log(cursor)
-      console.log(cursor[0])
-      console.log(cursor.length)
-      const cursor2 =  await db
+    console.log(cursor)
+    console.log(cursor[0])
+    console.log(cursor.length)
+    const cursor2 = await db
       .collection('refuels')
       .aggregate([
         {
@@ -58,7 +58,44 @@ async function handler(req, res) {
             'vid': vehicle._id,
           }
         }, {
+          '$project': {
+            'refuel_on': 1,
+            'refueled_on': {
+              '$dateFromString': {
+                'dateString': '$refuel_on'
+              }
+            },
+            'spending': 1,
+            'spendingAsInt': {
+              '$toInt': '$spending'
+            },
+            'refuel_month': {
+              '$month': '$refueled_on'
+            },
+            'refuel_year': {
+              '$year': '$refueled_on'
+            },
+            'current_month': {
+              '$month': new Date()
+            },
+            'current_year': {
+              '$year': new Date()
+            }
+          }
+        }, {
           '$addFields': {
+            'refuel_month': {
+              '$month': '$refueled_on'
+            },
+            'refuel_year': {
+              '$year': '$refueled_on'
+            },
+            'current_month': {
+              '$month': new Date()
+            },
+            'current_year': {
+              '$year': new Date()
+            },
             'spendingAsInt': {
               '$toInt': '$spending'
             }
@@ -67,38 +104,33 @@ async function handler(req, res) {
           '$match': {
             '$expr': {
               '$eq': [
-                {
-                  '$month': new Date("$refuel_on")
-                }, {
-                  '$month': new Date()
-                }
+                '$refuel_month', '$current_month'
               ]
             }
           }
         }, {
           '$group': {
-            '_id': '$vid', 
+            '_id': '$vid',
             'totalSpendingThisMonth': {
               '$sum': '$spendingAsInt'
             }
           }
-        },
-        {
+        }, {
           '$limit': 1
         }
       ]).toArray()
-      console.log(cursor2)
-      console.log(cursor2[0])
-      console.log(cursor2.length)
-      try {
-        vehicles[i].total_spending = cursor[0]["totalSpending"]
-        vehicles[i].monthly_spending = cursor2[0]["totalSpendingThisMonth"]
-      } catch (error) {
-        vehicles[i].total_spending = 0
-        vehicles[i].monthly_spending = 0
-      }
+    console.log(cursor2)
+    console.log(cursor2[0])
+    console.log(cursor2.length)
+    try {
+      vehicles[i].total_spending = cursor[0]["totalSpending"]
+      vehicles[i].monthly_spending = cursor2[0]["totalSpendingThisMonth"]
+    } catch (error) {
+      vehicles[i].total_spending = 0
+      vehicles[i].monthly_spending = 0
+    }
 
-    
+
   }
   client.close()
   res.status(201).json({ message: 'Vehicles Pulled!', vehicles: vehicles, email: userEmail })
