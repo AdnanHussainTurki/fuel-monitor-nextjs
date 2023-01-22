@@ -1,4 +1,4 @@
-import { ObjectId, ObjectID } from 'bson'
+import { ObjectId } from 'mongodb'
 import { getSession } from 'next-auth/react'
 import { connectToDatabase } from '../../../lib/mongodb'
 
