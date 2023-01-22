@@ -90,8 +90,8 @@ async function handler(req, res) {
       console.log(cursor2)
       console.log(cursor2[0])
       console.log(cursor2.length)
-      vehicles[i].total_spending = cursor[0].totalSpending
-      vehicles[i].monthly_spending = cursor2[0].totalSpendingThisMonth
+      vehicles[i].total_spending = cursor[0]["totalSpending"]
+      vehicles[i].monthly_spending = cursor2[0]["totalSpendingThisMonth"]
     
   }
   client.close()
