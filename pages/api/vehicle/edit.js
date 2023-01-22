@@ -16,7 +16,7 @@ async function handler(req, res) {
         currency,
         fuelCapacity,
         fuelReserve,
-        fuelType,
+        fuelType
     } = data
     if (
         !vid ||
@@ -62,7 +62,7 @@ async function handler(req, res) {
                 fuelCapacity: fuelCapacity,
                 fuelReserve: fuelReserve,
                 fuelType: fuelType,
-                createdAt: new Date(),
+                updatedAt: new Date(),
             },
         }
     )

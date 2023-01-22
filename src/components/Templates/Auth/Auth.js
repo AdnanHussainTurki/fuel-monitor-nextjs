@@ -1,9 +1,12 @@
 import NavBar from '../../Layout/NavBar/NavBar'
 import CustomHead from '../../Layout/Head/CustomHead'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Auth(props) {
   return (
     <div className="">
+      <ToastContainer />
       <CustomHead />
       <NavBar />
       <main className="min-h-screen bg-gray-100">

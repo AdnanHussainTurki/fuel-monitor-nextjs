@@ -12,7 +12,7 @@ import { FaPencilAlt } from 'react-icons/fa'
 import Loading from '../../../src/components/Layout/Loading/Loading'
 import VehicleStore from '../../../src/stores/VehicleStore'
 import { getSession } from 'next-auth/react'
-
+import {  toast } from 'react-toastify';
 export default function add() {
     const [vehicle, setVehicle] = useState({})
     const [refuels, setRefuels] = useState({})
@@ -64,6 +64,11 @@ export default function add() {
             setIsLoading(false)
         }
     }, [vehicleStore])
+    const handleCharts = () => {
+        toast("Our intern cartographer is currently working on charts. Can you please check back later. 🥶", {
+            position: "bottom-center",
+        });
+    }
     return (
         <Auth>
             {isLoading ? (
@@ -97,13 +102,13 @@ export default function add() {
                         </p>
                         <br />
                         <div>
-                            <Link
-                                href={'#'}
+                            <button
+                                onClick={handleCharts}
                                 class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
                             >
                                 <Graph className="h-5 pr-2 fill-red-500 block" />
                                 Charts
-                            </Link>
+                            </button>
                             <Link
                                 href={`/vehicle/refuel/${vehicle._id}`}
                                 class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
