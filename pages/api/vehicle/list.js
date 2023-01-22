@@ -27,7 +27,7 @@ async function handler(req, res) {
       .aggregate([
         {
           '$match': {
-            'vid': ObjectId(vehicle._id),
+            'vid': vehicle._id,
           }
         }, {
           '$addFields': {
@@ -49,7 +49,7 @@ async function handler(req, res) {
       .aggregate([
         {
           '$match': {
-            'vid': ObjectId(vehicle._id),
+            'vid': vehicle._id,
           }
         }, {
           '$addFields': {
