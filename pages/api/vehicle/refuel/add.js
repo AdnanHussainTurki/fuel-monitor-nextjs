@@ -14,6 +14,7 @@ async function handler(req, res) {
     rate_per_litre,
     refuel_on,
     percent_before_refuel,
+    continued
   } = data;
   if (!vid || !spending || !meter_reading || !rate_per_litre || !refuel_on) {
     res.status(422).json({
@@ -47,6 +48,7 @@ async function handler(req, res) {
       rate_per_litre,
       refuel_on,
       percent_before_refuel,
+      continued,
       user_email: userEmail,
       created_at: new Date(),
     });

@@ -8,6 +8,7 @@ import FuelHandle from '../../../../../src/components/Svg/FuelHandle'
 import Loading from '../../../../../src/components/Layout/Loading/Loading'
 import { getSession } from 'next-auth/react'
 import VehicleStore from '../../../../../src/stores/VehicleStore'
+import {  ImBin } from 'react-icons/im'
 
 async function doEditRefuel(
     rid,
@@ -57,6 +58,7 @@ async function doEditRefuel(
 }
 export default function EditRefuel() {
     const [vehicle, setVehicle] = useState({})
+    const [isDeleting, setIsDeleting] = useState(false)
     const [lastRefuel, setLastRefuel] = useState({})
     const [currentRefuel, setCurrentRefuel] = useState({})
     const [isLoading, setIsLoading] = useState(false)
@@ -79,6 +81,25 @@ export default function EditRefuel() {
             const data = await response.json()
             setVehicle(data.vehicle)
         }
+
+        const fetchLastRefuel = async () => {
+            const response = await fetch('/api/vehicle/refuel/previous?rid=' + rid)
+            const data = await response.json()
+            if (data.refuel.length) {
+                const refuel = data.refuel[0]
+                console.log('previousRefuel', refuel)
+                setLastRefuel(refuel)
+            }
+        }
+        fetchVehicle()
+        fetchLastRefuel()
+     
+        setIsLoading(false)
+    }, [vid, rid])
+    useEffect(() => {  
+        if (lastRefuel === undefined) {
+            return
+        }
         const fetchCurrentRefuel = async () => {
             const response = await fetch('/api/vehicle/refuel/get?rid=' + rid)
             const data = await response.json()
@@ -93,28 +114,20 @@ export default function EditRefuel() {
                 ratePerLitreInputRef.current.value = refuel.rate_per_litre
                 refuelingOnInputRef.current.value = refuel.refuel_on
                 fuelPercentBeforeRefuelInputRef.current.value = refuel.percent_before_refuel
-                if (refuel.continued == true) {
-                    continuedInputRef.current.value = 1
-                } else {
-                    continuedInputRef.current.value = 0
+                if (lastRefuel.spending) {
+                    if (refuel.continued == true) {
+                        continuedInputRef.current.value = 1
+                    } else {
+                        continuedInputRef.current.value = 0
+                    }
                 }
                 setCurrentRefuel(refuel)
+            } else {
+                router.replace('/vehicle/view/' + vid)
             }
         }
-        const fetchLastRefuel = async () => {
-            const response = await fetch('/api/vehicle/refuel/previous?rid=' + rid)
-            const data = await response.json()
-            if (data.refuel.length) {
-                const refuel = data.refuel[0]
-                console.log('previousRefuel', refuel)
-                setLastRefuel(refuel)
-            }
-        }
-        fetchVehicle()
-        fetchLastRefuel()
         fetchCurrentRefuel()
-        setIsLoading(false)
-    }, [vid, rid])
+    }, [lastRefuel])
     const submitHandler = async (event) => {
         event.preventDefault()
         if (isEditing) {
@@ -131,12 +144,45 @@ export default function EditRefuel() {
             ratePerLitreInputRef.current.value,
             refuelingOnInputRef.current.value,
             fuelPercentBeforeRefuelInputRef.current.value,
-            continuedInputRef.current.value
+            (lastRefuel.spending) ? continuedInputRef.current.value : false
         )
         setisEditing(false)
         router.replace('/vehicle/view/' + vid)
     }
-
+    const deleteHandler = async (event) => {
+        event.preventDefault()
+        if (isDeleting) {
+            return
+        }
+        setIsDeleting(true)
+        const result = await fetch('/api/vehicle/refuel/delete', {
+            method: 'POST',
+            body: JSON.stringify({
+                rid: rid,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        if (!result.ok) {
+            setIsDeleting(false)
+            return
+        }
+        
+        VehicleStore.update((s) => {
+            if (s.refuels[vid] === undefined) {
+                s.refuels[vid] = { data: [], refreshNeeded: false }
+            }
+            const index = s.refuels[vid].data.findIndex((refuel) => refuel._id === rid)
+            if (index !== -1) {
+                s.refuels[vid].data.splice(index, 1)
+            }
+        })
+   
+        
+        setIsDeleting(false)
+        router.replace('/')
+    }
     return (
         <Auth>
             {isLoading ? (
@@ -303,6 +349,7 @@ export default function EditRefuel() {
                                     />
                                 </div>
                             </div>
+                            {lastRefuel.spending && (
                             <div className="mt-3">
                                 <label
                                     className="block text-xs font-normal uppercase  text-red-600 text-right"
@@ -321,33 +368,58 @@ export default function EditRefuel() {
                                     <option value="1">Yes, last refuel record is also added in here.</option>
                                 </select>
                             </div>
+                            )}
                             <br/>
-                            <button className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
-                                {isEditing && (
-                                    <svg
-                                        aria-hidden="true"
-                                        class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
-                                        viewBox="0 0 100 101"
-                                        fill="none"
-                                    >
-                                        <path
-                                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                            fill="currentColor"
-                                        />
-                                        <path
-                                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                            fill="currentFill"
-                                        />
-                                    </svg>
-                                )}
-                                {isEditing && 'Correcting...'}
-                                {!isEditing && 'Edit Refuel'}
-                            </button>
+                            <div className="flex justify-between ">
+                                <button className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
+                                    {isEditing && (
+                                        <svg
+                                            aria-hidden="true"
+                                            class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+                                            viewBox="0 0 100 101"
+                                            fill="none"
+                                        >
+                                            <path
+                                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                                fill="currentColor"
+                                            />
+                                            <path
+                                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                                fill="currentFill"
+                                            />
+                                        </svg>
+                                    )}
+                                    {isEditing && 'Correcting...'}
+                                    {!isEditing && 'Edit Refuel'}
+                                </button>
+                                <button onClick={deleteHandler} className="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
+                                    {isDeleting && (
+                                        <svg
+                                            aria-hidden="true"
+                                            class="w-3 h-3 text-white animate-spin text-white fill-red-600"
+                                            viewBox="0 0 100 101"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                                fill="currentColor"
+                                            />
+                                            <path
+                                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                                fill="currentFill"
+                                            />
+                                        </svg>
+                                    )}
+                                    {!isDeleting && (<ImBin />)}
+                                </button>
+                            </div>
                         </form>
                     </div>
-                </div>
-            )}
-        </Auth>
+                </div >
+            )
+            }
+        </Auth >
     )
 }
 export async function getServerSideProps(context) {

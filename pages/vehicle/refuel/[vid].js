@@ -19,7 +19,8 @@ async function doRefuel(
     meter_reading,
     rate_per_litre,
     refuel_on,
-    percent_before_refuel
+    percent_before_refuel,
+    continued
 ) {
     const response = await fetch('/api/vehicle/refuel/add', {
         method: 'POST',
@@ -30,6 +31,7 @@ async function doRefuel(
             rate_per_litre: rate_per_litre,
             refuel_on: refuel_on,
             percent_before_refuel: percent_before_refuel,
+            continued: Boolean(parseInt(continued)),
         }),
         headers: {
             'Content-Type': 'application/json',
@@ -52,6 +54,7 @@ async function doRefuel(
                 rate_per_litre: rate_per_litre,
                 refuel_on: refuel_on,
                 percent_before_refuel: percent_before_refuel,
+                continued: Boolean(parseInt(continued)),
                 created_at: new Date().toISOString(),
             },
             ...s.refuels[vid].data,
@@ -70,6 +73,8 @@ export default function Refuel() {
     const ratePerLitreInputRef = useRef()
     const refuelingOnInputRef = useRef()
     const fuelPercentBeforeRefuelInputRef = useRef()
+    const continuedInputRef = useRef()
+
     const router = useRouter()
     const { vid } = router.query
     useEffect(() => {
@@ -110,7 +115,8 @@ export default function Refuel() {
             meterReadingInputRef.current.value,
             ratePerLitreInputRef.current.value,
             refuelingOnInputRef.current.value,
-            fuelPercentBeforeRefuelInputRef.current.value
+            fuelPercentBeforeRefuelInputRef.current.value,
+            continuedInputRef.current.value
         )
         setIsAdding(false)
         router.replace('/vehicle/view/' + vid)
@@ -281,6 +287,27 @@ export default function Refuel() {
                                     />
                                 </div>
                             </div>
+                            {lastRefuel.spending && (
+                            <div className="mt-3">
+                                <label
+                                    className="block text-xs font-normal uppercase  text-red-600 text-right"
+                                    htmlFor="model"
+                                >
+                                    Is this Refuel is right after the last added refuel entry?
+                                </label>
+                                <select
+
+                                    ref={continuedInputRef}
+                                    id="type"
+                                    className="text-red-600 appearance-none rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
+                                >
+                                    <option value="">Select</option>
+                                    <option value="0">No, I had refueled this vehicle previously but not added here</option>
+                                    <option value="1">Yes, last refuel record is also added in here.</option>
+                                </select>
+                            </div>
+                            )}
+                            <br/>
                             <button className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
                                 {isAdding && (
                                     <svg
