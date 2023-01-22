@@ -90,8 +90,14 @@ async function handler(req, res) {
       console.log(cursor2)
       console.log(cursor2[0])
       console.log(cursor2.length)
-      vehicles[i].total_spending = cursor[0]["totalSpending"]
-      vehicles[i].monthly_spending = cursor2[0]["totalSpendingThisMonth"]
+      try {
+        vehicles[i].total_spending = cursor[0]["totalSpending"]
+        vehicles[i].monthly_spending = cursor2[0]["totalSpendingThisMonth"]
+      } catch (error) {
+        vehicles[i].total_spending = 0
+        vehicles[i].monthly_spending = 0
+      }
+
     
   }
   client.close()
