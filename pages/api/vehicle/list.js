@@ -44,6 +44,7 @@ async function handler(req, res) {
           }
         }
       ]).toArray()
+      console.log(cursor)
       const cursor2 =  await db
       .collection('refuels')
       .aggregate([
