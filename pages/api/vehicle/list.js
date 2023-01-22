@@ -48,6 +48,7 @@ async function handler(req, res) {
         }
       ]).toArray()
       console.log(cursor)
+      console.log(cursor[0])
       console.log(cursor.length)
       const cursor2 =  await db
       .collection('refuels')
@@ -87,9 +88,10 @@ async function handler(req, res) {
         }
       ]).toArray()
       console.log(cursor2)
+      console.log(cursor2[0])
       console.log(cursor2.length)
-      vehicles[i].total_spending = cursor[0][0].totalSpending
-      vehicles[i].monthly_spending = cursor2[0][0].totalSpendingThisMonth
+      vehicles[i].total_spending = cursor[0].totalSpending
+      vehicles[i].monthly_spending = cursor2[0].totalSpendingThisMonth
     
   }
   client.close()
