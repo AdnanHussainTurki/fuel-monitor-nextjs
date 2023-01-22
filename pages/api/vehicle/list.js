@@ -42,6 +42,9 @@ async function handler(req, res) {
               '$sum': '$spendingAsInt'
             }
           }
+        },
+        {
+          '$limit': 1
         }
       ]).toArray()
       console.log(cursor)
@@ -77,10 +80,13 @@ async function handler(req, res) {
               '$sum': '$spendingAsInt'
             }
           }
+        },
+        {
+          '$limit': 1
         }
       ]).toArray()
-      vehicles[i].total_spending = cursor[0][0].totalSpending
-      vehicles[i].monthly_spending = cursor2[0][0].totalSpendingThisMonth
+      vehicles[i].total_spending = cursor[0].totalSpending
+      vehicles[i].monthly_spending = cursor2[0].totalSpendingThisMonth
     
   }
   client.close()
