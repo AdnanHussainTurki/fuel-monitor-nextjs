@@ -19,8 +19,8 @@ export default function (props) {
            
         </h5>
         <p className="text-gray-700 text-sm mb-4">
-          You have paid  <span class="text-blue-500 bg-blue-300/5 text-xs px-3 py-2 inline-flex gap-2 items-center justify-center">
-                        <span class="font-mono"> {props.vehicle.currency} {parseFloat(props.vehicle.monthly_spending).toFixed(2).toLocaleString()}</span>
+          You have paid  <span className="text-blue-500 bg-blue-300/5 text-xs px-3 py-2 inline-flex gap-2 items-center justify-center">
+                        <span className="font-mono"> {props.vehicle.currency} {parseFloat(props.vehicle.monthly_spending).toFixed(2).toLocaleString()}</span>
                     </span> for this vehicle refueling this month.
         </p>
         <Link

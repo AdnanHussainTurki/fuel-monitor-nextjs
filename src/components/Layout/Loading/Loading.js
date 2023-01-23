@@ -18,7 +18,7 @@ const BackAndForthDiv = styled.div`
 
 export default function Loading(props) {
     return (
-        <BackAndForthDiv class="grid justify-items-center self-center justify-self-center place-self-center">
+        <BackAndForthDiv className="grid justify-items-center self-center justify-self-center place-self-center">
             <BouncyDiv className="flex w-auto justify-center content-center items-stretch self-center justify-self-center place-self-center">
                 <div className="  w-20 justify-items-center content-center ">
                     {/* <Car className="fill-red-500 p-0 bg-contain" /> */}

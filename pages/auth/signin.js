@@ -6,6 +6,7 @@ import { gerSession } from 'next-auth/react'
 import Link from 'next/link'
 import Logo from '../../src/components/Layout/Logo/Logo'
 import Loading from '../../src/components/Layout/Loading/Loading'
+import { toast } from 'react-toastify'
 export default function Home() {
     const [isChecking, setIsChecking] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
@@ -40,6 +41,16 @@ export default function Home() {
         console.log(result)
         if (!result.error) {
             router.replace('/')
+        } else {
+            if (result.error === 'No user found!') {
+                toast('Invalid email and password combination. 😶', {
+                    position: 'bottom-center',
+                })
+            } else {
+                toast('Something went wrong. 😶', {
+                    position: 'bottom-center',
+                })
+            }
         }
     }
     return (
@@ -105,7 +116,7 @@ export default function Home() {
                             type="password"
                             name="password"
                             required="required"
-                            autocomplete="current-password"
+                            autoComplete="current-password"
                             ref={passwordInputRef}
                         />
                     </div>
