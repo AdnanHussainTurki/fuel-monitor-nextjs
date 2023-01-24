@@ -4,11 +4,13 @@ import { HiPlusCircle } from 'react-icons/hi2'
 import Auth from '../src/components/Templates/Auth/Auth'
 import SmallVehicle from '../src/components/Vehicle/SmallVehicle'
 import { useRef, useState, useEffect } from 'react'
-import { getSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import { fetchData } from 'next-auth/client/_utils'
 import Loading from '../src/components/Layout/Loading/Loading'
+import Greetings from '../src/components/Profile/Greetings'
 import VehicleStore from '../src/stores/VehicleStore'
 export default function Home(props) {
+    const { data: session, status } = useSession()
     const [isLoading, setIsLoading] = useState(true)
     const [vehicles, setVehicles] = useState([])
     const vehicleStore = VehicleStore.useState((s) => s)
@@ -46,10 +48,7 @@ export default function Home(props) {
                 <div class="p-6 bg-white border-b ">
                     <div class="flex flex-row">
                         <div class="basis-1/2">
-                            {/* <span>Portfolio: </span>
-                            <span class="text-emerald-500 bg-emerald-500/5 text-sm px-3 py-2 inline-flex gap-2 items-center justify-center">
-                                <span class="font-mono">Rs. 61,334.00</span>
-                            </span> */}
+                            <Greetings user={session.user}/>
                         </div>
                         <div class="basis-1/2 align-middle text-center ">
                             <Link
