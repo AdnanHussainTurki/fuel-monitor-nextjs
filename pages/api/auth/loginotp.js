@@ -4,6 +4,7 @@ import { connectToDatabase } from '../../../lib/mongodb'
 
 async function handler(req, res) {
     if (req.method !== 'POST') {
+        res.status(405).end() // Method Not Allowed
         return
     }
     const { email } = req.body
@@ -49,16 +50,15 @@ async function handler(req, res) {
         text: 'Hi!', // plain text body
         html: 'Hi,<br> Your login code is <b>' + randomFourDigit + '</b>.', // html body
     })
+    //
     // Close the connection
     client.close()
 
     // Log the response
     console.log('Message sent: %s', info.messageId)
     if (!!info) {
-        res.status(200).json({ success: true })
-        return
+        return res.status(200).json({ success: true })
     }
-    res.status(200).json({ success: false })
-    return
+    return res.status(200).json({ success: false })
 }
 export default handler
