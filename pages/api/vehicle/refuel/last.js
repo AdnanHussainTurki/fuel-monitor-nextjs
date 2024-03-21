@@ -14,13 +14,13 @@ async function handler(req, res) {
     return
   }
   const vid = req.query.vid;
-  console.log(req.query)
-  console.log({vid})
+  
+  
 //   TODO: Add check for vid
   const userEmail = session.user.email
   const client = await connectToDatabase()
   const db = await client.db()
-  console.log({ user_email: userEmail, _id: ObjectId(vid) })
+   })
   const cursor = await db
   .collection('refuels')
   .find({ "vid": ObjectId(vid) })

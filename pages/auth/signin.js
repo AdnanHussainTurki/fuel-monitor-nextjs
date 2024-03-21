@@ -38,7 +38,7 @@ export default function Home() {
             password: passwordInputRef.current.value,
         })
         setIsChecking(false)
-        console.log(result)
+
         if (!result.error) {
             router.replace('/')
         } else {
@@ -76,7 +76,7 @@ export default function Home() {
                     </Link>
                 </div>
             </div>
-            <div class="w-11/12 sm:max-w-md mt-6 px-6 m-10 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div className="w-11/12 sm:max-w-md mt-6 mb-2 px-6 m-10 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 <form onSubmit={submitHandler}>
                     <input
                         type="hidden"
@@ -85,34 +85,36 @@ export default function Home() {
                     />
                     <div>
                         <label
-                            class="block font-large text-sm text-gray-700"
-                            for="email"
+                            className="block font-large text-sm text-gray-700"
+                            htmlFor="email"
                         >
                             Email
                         </label>
 
                         <input
-                            class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
+                            className="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
                             id="email"
                             type="email"
                             name="email"
                             required="required"
                             autofocus="autofocus"
+                            placeholder="you@somewhere.org"
                             ref={emailInputRef}
                         />
                     </div>
 
-                    <div class="mt-4">
+                    <div className="mt-4">
                         <label
-                            class="block font-large text-sm text-gray-700"
-                            for="password"
+                            className="block font-large text-sm text-gray-700"
+                            htmlFor="password"
                         >
                             Password
                         </label>
 
                         <input
-                            class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2  w-full"
+                            className="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2  w-full"
                             id="password"
+                            placeholder="●●●●●●●●"
                             type="password"
                             name="password"
                             required="required"
@@ -121,21 +123,22 @@ export default function Home() {
                         />
                     </div>
 
-                    <div class="flex items-center justify-end mt-4">
-                        <Link href="/auth/signup"
-              class="underline text-sm text-red-600 hover:text-gray-900"
-            >
-              Not Registered?
-            </Link>
+                    <div className="flex items-center justify-end mt-4">
+                        <Link
+                            href="/auth/forgot"
+                            className="underline text-sm text-red-600 hover:text-gray-900"
+                        >
+                            Forgot Password?
+                        </Link>
 
                         <button
                             type="submit"
-                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ml-3"
+                            className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ml-3"
                         >
                             {isChecking && (
                                 <svg
                                     aria-hidden="true"
-                                    class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+                                    className="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
                                     viewBox="0 0 100 101"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +158,16 @@ export default function Home() {
                         </button>
                     </div>
                 </form>
-             
+            </div>
+            <div className="w-11/12 sm:max-w-md  px-4 py-2 bg-white shadow-md overflow-hidden sm:rounded-lg">
+                <div className="flex">
+                    <Link
+                        href="/auth/signup"
+                        className="inline-flex items-center px-4 py-2 bg-gray-700 border border-transparent rounded-md  text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 "
+                    >
+                        Sign up!
+                    </Link>
+                </div>
             </div>
         </Simple>
     )

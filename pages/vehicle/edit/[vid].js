@@ -43,7 +43,7 @@ export default function edit() {
     const [fuelTypeJson, setFuelTypeJson] = useState(null)
     const [fuelCapacity, setFuelCapacity] = useState(null)
     const [fuelReserve, setFuelReserve] = useState(null)
-    
+
     const cars = BrandsStore.useState((s) => s.cars)
     const bikes = BrandsStore.useState((s) => s.bikes)
     const currencies = CurrencyStore.useState((s) => s.currencies)
@@ -85,7 +85,7 @@ export default function edit() {
     }
     const changeBrands = (event) => {
         const type = typeInputRef?.current?.value
-        console.log('changeBrands', type)
+
         _setBrandOptions(type)
         setBrandJson({})
     }
@@ -189,7 +189,7 @@ export default function edit() {
                 return vehicle
             })
         })
-        
+
         setIsAdding(false)
         router.replace('/vehicle/view/' + vid)
     }
@@ -213,7 +213,7 @@ export default function edit() {
             return
         }
         VehicleStore.update((s) => {
-            s.vehicles = s.vehicles.filter((vehicle) => vehicle._id !== vid);
+            s.vehicles = s.vehicles.filter((vehicle) => vehicle._id !== vid)
         })
         if (vehicleStore.refuels[vid]) {
             RefuelStore.update((s) => {
@@ -222,7 +222,7 @@ export default function edit() {
                 )
             })
         }
-        
+
         setIsDeleting(false)
         router.replace('/')
     }
@@ -235,7 +235,7 @@ export default function edit() {
     return (
         <Auth>
             {isLoading ? (
-                <Loading/>
+                <Loading />
             ) : (
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
                     <div className="p-6  bg-white border-b ">
@@ -424,7 +424,7 @@ export default function edit() {
                                     {isEditing && (
                                         <svg
                                             aria-hidden="true"
-                                            class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+                                            className="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -443,11 +443,14 @@ export default function edit() {
                                     {!isEditing && 'Edit Vehicle'}
                                 </button>
 
-                                <button onClick={deleteHandler} className="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
+                                <button
+                                    onClick={deleteHandler}
+                                    className="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 "
+                                >
                                     {isDeleting && (
                                         <svg
                                             aria-hidden="true"
-                                            class="w-3 h-3 text-white animate-spin text-white fill-red-600"
+                                            className="w-3 h-3 text-white animate-spin text-white fill-red-600"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -462,7 +465,7 @@ export default function edit() {
                                             />
                                         </svg>
                                     )}
-                                    {!isDeleting && (<ImBin/>)}
+                                    {!isDeleting && <ImBin />}
                                 </button>
                             </div>
                         </form>
@@ -477,7 +480,7 @@ export async function getServerSideProps(context) {
     if (!session) {
         return {
             redirect: {
-                destination: '/auth/signin',
+                destination: '/auth/forgot',
                 permanent: false,
             },
         }
@@ -485,5 +488,4 @@ export async function getServerSideProps(context) {
     return {
         props: { session },
     }
-  }
-  
+}

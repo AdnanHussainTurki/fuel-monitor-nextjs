@@ -14,8 +14,8 @@ async function handler(req, res) {
         return
     }
     const rid = req.query.rid;
-    console.log(req.query)
-    console.log({ rid })
+    
+    
     if (
         !rid
     ) {
@@ -28,7 +28,7 @@ async function handler(req, res) {
     const userEmail = session.user.email
     const client = await connectToDatabase()
     const db = await client.db()
-    console.log({ user_email: userEmail, _id: ObjectId(rid) })
+     })
     const existing = await db
         .collection('refuels')
         .findOne({ _id: ObjectId(rid), "user_email": userEmail })

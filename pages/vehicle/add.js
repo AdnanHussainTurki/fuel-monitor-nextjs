@@ -54,7 +54,7 @@ export default function add() {
 
     const changeBrands = () => {
         const type = typeInputRef.current.value
-        console.log('changeBrands', type)
+
         if (type.toLowerCase() === 'car') {
             setBrandOptions(
                 cars.map((car) => ({ value: car.name, label: car.name }))
@@ -101,18 +101,21 @@ export default function add() {
             setIsAdding(false)
             return
         }
-        const addedVehicle = (await result.json()).vehicle;
+        const addedVehicle = (await result.json()).vehicle
         VehicleStore.update((s) => {
-            s.vehicles = [...s.vehicles,{
-                _id: addedVehicle.insertedId,
-                brand: enteredBrand,
-                model: enteredModel,
-                type: enteredType,
-                currency: enteredCurrency,
-                fuelType: enteredFuelType,
-                fuelCapacity: enteredFuelCapacity,
-                fuelReserve: enteredFuelReserve,
-            } ]
+            s.vehicles = [
+                ...s.vehicles,
+                {
+                    _id: addedVehicle.insertedId,
+                    brand: enteredBrand,
+                    model: enteredModel,
+                    type: enteredType,
+                    currency: enteredCurrency,
+                    fuelType: enteredFuelType,
+                    fuelCapacity: enteredFuelCapacity,
+                    fuelReserve: enteredFuelReserve,
+                },
+            ]
         })
         setIsAdding(false)
         router.replace('/')
@@ -145,8 +148,8 @@ export default function add() {
     }, [])
     return (
         <Auth>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
-                <div class="p-6  bg-white border-b ">
+            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
+                <div className="p-6  bg-white border-b ">
                     {isLoading && <Loading />}
                     {!isLoading && (
                         <div>
@@ -170,7 +173,6 @@ export default function add() {
                                         </label>
                                         <select
                                             onChange={changeBrands}
-
                                             ref={typeInputRef}
                                             dir="rtl"
                                             id="type"
@@ -297,7 +299,7 @@ export default function add() {
                                     {isAdding && (
                                         <svg
                                             aria-hidden="true"
-                                            class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+                                            className="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -329,7 +331,7 @@ export async function getServerSideProps(context) {
     if (!session) {
         return {
             redirect: {
-                destination: '/auth/signin',
+                destination: '/auth/forgot',
                 permanent: false,
             },
         }

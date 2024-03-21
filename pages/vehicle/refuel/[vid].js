@@ -89,7 +89,7 @@ export default function Refuel() {
         const fetchLastRefuel = async () => {
             const response = await fetch('/api/vehicle/refuel/last?vid=' + vid)
             const data = await response.json()
-            console.log('lastRefuel', data)
+
             if (data.refuel.length) {
                 const refuel = data.refuel[0]
                 meterReadingInputRef.current.value = refuel.meter_reading
@@ -288,31 +288,37 @@ export default function Refuel() {
                                 </div>
                             </div>
                             {lastRefuel.spending && (
-                            <div className="mt-3">
-                                <label
-                                    className="block text-xs font-normal uppercase  text-red-600 text-right"
-                                    htmlFor="model"
-                                >
-                                    Is this Refuel is right after the last added refuel entry?
-                                </label>
-                                <select
-
-                                    ref={continuedInputRef}
-                                    id="type"
-                                    className="text-red-600 appearance-none rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
-                                >
-                                    <option value="">Select</option>
-                                    <option value="0">No, I had refueled this vehicle previously but not added here</option>
-                                    <option value="1">Yes, last refuel record is also added in here.</option>
-                                </select>
-                            </div>
+                                <div className="mt-3">
+                                    <label
+                                        className="block text-xs font-normal uppercase  text-red-600 text-right"
+                                        htmlFor="model"
+                                    >
+                                        Is this Refuel is right after the last
+                                        added refuel entry?
+                                    </label>
+                                    <select
+                                        ref={continuedInputRef}
+                                        id="type"
+                                        className="text-red-600 appearance-none rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="0">
+                                            No, I had refueled this vehicle
+                                            previously but not added here
+                                        </option>
+                                        <option value="1">
+                                            Yes, last refuel record is also
+                                            added in here.
+                                        </option>
+                                    </select>
+                                </div>
                             )}
-                            <br/>
+                            <br />
                             <button className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
                                 {isAdding && (
                                     <svg
                                         aria-hidden="true"
-                                        class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+                                        className="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
                                         viewBox="0 0 100 101"
                                         fill="none"
                                     >
@@ -337,16 +343,16 @@ export default function Refuel() {
     )
 }
 export async function getServerSideProps(context) {
-  const session = await getSession({ req: context.req })
-  if (!session) {
-      return {
-          redirect: {
-              destination: '/auth/signin',
-              permanent: false,
-          },
-      }
-  }
-  return {
-      props: { session },
-  }
+    const session = await getSession({ req: context.req })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/forgot',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: { session },
+    }
 }

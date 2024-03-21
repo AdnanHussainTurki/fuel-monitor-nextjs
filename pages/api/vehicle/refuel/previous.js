@@ -14,13 +14,13 @@ async function handler(req, res) {
         return
     }
     const rid = req.query.rid;
-    console.log(req.query)
-    console.log({ rid })
+    
+    
     //   TODO: Add check for rid
     const userEmail = session.user.email
     const client = await connectToDatabase()
     const db = await client.db()
-    console.log({ user_email: userEmail, _id: ObjectId(rid) })
+     })
     const cursor = await db
         .collection('refuels')
         .find({ "_id": ObjectId(rid), "user_email": userEmail })
@@ -34,7 +34,7 @@ async function handler(req, res) {
         .sort({ created_at: -1 })
         .limit(1)
     const result = await cursor2.toArray()
-    console.log("result", result)
+    
     client.close()
     res.status(201).json({ message: 'Previous Refueling Pulled!', refuel: result, email: userEmail })
 }

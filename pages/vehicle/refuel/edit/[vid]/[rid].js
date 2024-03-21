@@ -8,7 +8,7 @@ import FuelHandle from '../../../../../src/components/Svg/FuelHandle'
 import Loading from '../../../../../src/components/Layout/Loading/Loading'
 import { getSession } from 'next-auth/react'
 import VehicleStore from '../../../../../src/stores/VehicleStore'
-import {  ImBin } from 'react-icons/im'
+import { ImBin } from 'react-icons/im'
 
 async function doEditRefuel(
     rid,
@@ -30,7 +30,7 @@ async function doEditRefuel(
             rate_per_litre: rate_per_litre,
             refuel_on: refuel_on,
             percent_before_refuel: percent_before_refuel,
-            continued: Boolean(parseInt(continued))
+            continued: Boolean(parseInt(continued)),
         }),
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +47,9 @@ async function doEditRefuel(
         // Search for rid in s.refuels[vid].data._id
         // If found, update the data
         // If not found, add the data
-        const index = s.refuels[vid].data.findIndex((refuel) => refuel._id === rid)
+        const index = s.refuels[vid].data.findIndex(
+            (refuel) => refuel._id === rid
+        )
         if (index === -1) {
             s.refuels[vid].data.push(data.refuel)
         } else {
@@ -72,7 +74,6 @@ export default function EditRefuel() {
     const router = useRouter()
     const { vid, rid } = router.query
     useEffect(() => {
-        console.log("Refuel Edit Page")
         if (rid === undefined) {
             return
         }
@@ -83,37 +84,38 @@ export default function EditRefuel() {
         }
 
         const fetchLastRefuel = async () => {
-            const response = await fetch('/api/vehicle/refuel/previous?rid=' + rid)
+            const response = await fetch(
+                '/api/vehicle/refuel/previous?rid=' + rid
+            )
             const data = await response.json()
             if (data.refuel.length) {
                 const refuel = data.refuel[0]
-                console.log('previousRefuel', refuel)
+
                 setLastRefuel(refuel)
             }
         }
         fetchVehicle()
         fetchLastRefuel()
-     
+
         setIsLoading(false)
     }, [vid, rid])
-    useEffect(() => {  
+    useEffect(() => {
         if (lastRefuel === undefined) {
             return
         }
         const fetchCurrentRefuel = async () => {
             const response = await fetch('/api/vehicle/refuel/get?rid=' + rid)
             const data = await response.json()
-            console.log('Current Refuel', data)
 
             if (data.refuel) {
                 const refuel = data.refuel
-                console.log('Current Refuel', refuel)
 
                 spendingInputRef.current.value = parseInt(refuel.spending)
                 meterReadingInputRef.current.value = refuel.meter_reading
                 ratePerLitreInputRef.current.value = refuel.rate_per_litre
                 refuelingOnInputRef.current.value = refuel.refuel_on
-                fuelPercentBeforeRefuelInputRef.current.value = refuel.percent_before_refuel
+                fuelPercentBeforeRefuelInputRef.current.value =
+                    refuel.percent_before_refuel
                 if (lastRefuel.spending) {
                     if (refuel.continued == true) {
                         continuedInputRef.current.value = 1
@@ -144,7 +146,7 @@ export default function EditRefuel() {
             ratePerLitreInputRef.current.value,
             refuelingOnInputRef.current.value,
             fuelPercentBeforeRefuelInputRef.current.value,
-            (lastRefuel.spending) ? continuedInputRef.current.value : false
+            lastRefuel.spending ? continuedInputRef.current.value : false
         )
         setisEditing(false)
         router.replace('/vehicle/view/' + vid)
@@ -168,18 +170,19 @@ export default function EditRefuel() {
             setIsDeleting(false)
             return
         }
-        
+
         VehicleStore.update((s) => {
             if (s.refuels[vid] === undefined) {
                 s.refuels[vid] = { data: [], refreshNeeded: false }
             }
-            const index = s.refuels[vid].data.findIndex((refuel) => refuel._id === rid)
+            const index = s.refuels[vid].data.findIndex(
+                (refuel) => refuel._id === rid
+            )
             if (index !== -1) {
                 s.refuels[vid].data.splice(index, 1)
             }
         })
-   
-        
+
         setIsDeleting(false)
         router.replace('/')
     }
@@ -350,32 +353,38 @@ export default function EditRefuel() {
                                 </div>
                             </div>
                             {lastRefuel.spending && (
-                            <div className="mt-3">
-                                <label
-                                    className="block text-xs font-normal uppercase  text-red-600 text-right"
-                                    htmlFor="model"
-                                >
-                                    Is this Refuel is right after the last added refuel entry?
-                                </label>
-                                <select
-
-                                    ref={continuedInputRef}
-                                    id="type"
-                                    className="text-red-600 appearance-none rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
-                                >
-                                    <option value="">Select</option>
-                                    <option value="0">No, I had refueled this vehicle previously but not added here</option>
-                                    <option value="1">Yes, last refuel record is also added in here.</option>
-                                </select>
-                            </div>
+                                <div className="mt-3">
+                                    <label
+                                        className="block text-xs font-normal uppercase  text-red-600 text-right"
+                                        htmlFor="model"
+                                    >
+                                        Is this Refuel is right after the last
+                                        added refuel entry?
+                                    </label>
+                                    <select
+                                        ref={continuedInputRef}
+                                        id="type"
+                                        className="text-red-600 appearance-none rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 p-2 w-full"
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="0">
+                                            No, I had refueled this vehicle
+                                            previously but not added here
+                                        </option>
+                                        <option value="1">
+                                            Yes, last refuel record is also
+                                            added in here.
+                                        </option>
+                                    </select>
+                                </div>
                             )}
-                            <br/>
+                            <br />
                             <div className="flex justify-between ">
                                 <button className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
                                     {isEditing && (
                                         <svg
                                             aria-hidden="true"
-                                            class="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+                                            className="mr-3 w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                         >
@@ -392,11 +401,14 @@ export default function EditRefuel() {
                                     {isEditing && 'Correcting...'}
                                     {!isEditing && 'Edit Refuel'}
                                 </button>
-                                <button onClick={deleteHandler} className="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ">
+                                <button
+                                    onClick={deleteHandler}
+                                    className="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 "
+                                >
                                     {isDeleting && (
                                         <svg
                                             aria-hidden="true"
-                                            class="w-3 h-3 text-white animate-spin text-white fill-red-600"
+                                            className="w-3 h-3 text-white animate-spin text-white fill-red-600"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -411,15 +423,14 @@ export default function EditRefuel() {
                                             />
                                         </svg>
                                     )}
-                                    {!isDeleting && (<ImBin />)}
+                                    {!isDeleting && <ImBin />}
                                 </button>
                             </div>
                         </form>
                     </div>
-                </div >
-            )
-            }
-        </Auth >
+                </div>
+            )}
+        </Auth>
     )
 }
 export async function getServerSideProps(context) {
@@ -427,7 +438,7 @@ export async function getServerSideProps(context) {
     if (!session) {
         return {
             redirect: {
-                destination: '/auth/signin',
+                destination: '/auth/forgot',
                 permanent: false,
             },
         }

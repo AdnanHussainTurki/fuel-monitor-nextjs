@@ -12,7 +12,7 @@ import { FaPencilAlt } from 'react-icons/fa'
 import Loading from '../../../src/components/Layout/Loading/Loading'
 import VehicleStore from '../../../src/stores/VehicleStore'
 import { getSession } from 'next-auth/react'
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify'
 export default function add() {
     const [vehicle, setVehicle] = useState({})
     const [refuels, setRefuels] = useState({})
@@ -40,11 +40,10 @@ export default function add() {
             setIsLoading(false)
         }
         const fetchRefuels = async () => {
-          console.log("🚨🚨 fetchRefuels")
             const response = await fetch('/api/vehicle/refuel/all?vid=' + vid)
             const data = await response.json()
             VehicleStore.update((s) => {
-                (s.refuels[vid] = {data: data.refuels, refreshNeeded: false})
+                s.refuels[vid] = { data: data.refuels, refreshNeeded: false }
             })
             setRefuels(data.refuels)
             setIsRefuelLoading(false)
@@ -65,17 +64,20 @@ export default function add() {
         }
     }, [vehicleStore])
     const handleCharts = () => {
-        toast("Our intern cartographer is currently working on charts. Can you please check back later. 🥶", {
-            position: "bottom-center",
-        });
+        toast(
+            'Our intern cartographer is currently working on charts. Can you please check back later. 🥶',
+            {
+                position: 'bottom-center',
+            }
+        )
     }
     return (
         <Auth>
             {isLoading ? (
                 <Loading />
             ) : (
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
-                    <div class="p-6  bg-white border-b ">
+                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg m-3">
+                    <div className="p-6  bg-white border-b ">
                         {vehicle.type == 'Car' ? (
                             <Car className="h-10 fill-red-500" />
                         ) : (
@@ -104,44 +106,46 @@ export default function add() {
                         <div>
                             <button
                                 onClick={handleCharts}
-                                class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
+                                className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
                             >
                                 <Graph className="h-5 pr-2 fill-red-500 block" />
                                 Charts
                             </button>
                             <Link
                                 href={`/vehicle/refuel/${vehicle._id}`}
-                                class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
+                                className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
                             >
                                 <FuelHandle className="h-5 pr-2 fill-red-500 block" />
                                 Refuel
                             </Link>
                             <Link
                                 href={`/vehicle/edit/${vehicle._id}`}
-                                class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
+                                className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  mr-2 mb-2"
                             >
                                 <FaPencilAlt className="h-5  fill-red-500 block" />
                             </Link>
                         </div>
                     </div>
                     {isRefuelLoading && <Loading withoutText={true} />}
-                    {!isRefuelLoading && <RefuelStrip refuels={refuels} vehicle={vehicle} />}
+                    {!isRefuelLoading && (
+                        <RefuelStrip refuels={refuels} vehicle={vehicle} />
+                    )}
                 </div>
             )}
         </Auth>
     )
 }
 export async function getServerSideProps(context) {
-  const session = await getSession({ req: context.req })
-  if (!session) {
-      return {
-          redirect: {
-              destination: '/auth/signin',
-              permanent: false,
-          },
-      }
-  }
-  return {
-      props: { session },
-  }
+    const session = await getSession({ req: context.req })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/forgot',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: { session },
+    }
 }
