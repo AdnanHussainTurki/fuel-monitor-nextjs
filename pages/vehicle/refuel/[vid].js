@@ -107,6 +107,10 @@ export default function Refuel() {
             return
         }
         setIsAdding(true)
+        let continued = false
+        if (lastRefuel.spending) {
+            continued = continuedInputRef.current.value
+        }
 
         // Add validation
         const data = await doRefuel(
@@ -116,7 +120,7 @@ export default function Refuel() {
             ratePerLitreInputRef.current.value,
             refuelingOnInputRef.current.value,
             fuelPercentBeforeRefuelInputRef.current.value,
-            continuedInputRef.current.value
+            continued
         )
         setIsAdding(false)
         router.replace('/vehicle/view/' + vid)

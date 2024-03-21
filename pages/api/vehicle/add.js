@@ -1,5 +1,6 @@
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
 import { connectToDatabase } from '../../../lib/mongodb'
+import { getServerSession } from 'next-auth'
 
 async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -29,7 +30,7 @@ async function handler(req, res) {
         })
         return
     }
-    const session = await getSession({ req: req })
+    const session = await getServerSession(req, res)
     if (!session) {
         res.status(401).json({ message: 'Not authenticated!' })
         return
@@ -46,19 +47,17 @@ async function handler(req, res) {
         return
     }
 
-    const vehicle = await db
-        .collection('vehicles')
-        .insertOne({
-            brand: brand,
-            model: model,
-            user_email: userEmail,
-            type: type,
-            currency: currency,
-            fuelCapacity: fuelCapacity,
-            fuelReserve: fuelReserve,
-            fuelType: fuelType,
-            createdAt: new Date(),
-        })
+    const vehicle = await db.collection('vehicles').insertOne({
+        brand: brand,
+        model: model,
+        user_email: userEmail,
+        type: type,
+        currency: currency,
+        fuelCapacity: fuelCapacity,
+        fuelReserve: fuelReserve,
+        fuelType: fuelType,
+        createdAt: new Date(),
+    })
     client.close()
     res.status(201).json({ message: 'Created vehicle!', vehicle: vehicle })
 }

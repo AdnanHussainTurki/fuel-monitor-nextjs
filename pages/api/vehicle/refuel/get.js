@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
 import { connectToDatabase } from '../../../../lib/mongodb'
 
 async function handler(req, res) {
@@ -8,7 +8,7 @@ async function handler(req, res) {
         return
     }
 
-    const session = await getSession({ req: req })
+    const session = await getServerSession(req, res)
     if (!session) {
         res.status(401).json({ message: 'Not authenticated!' })
         return
