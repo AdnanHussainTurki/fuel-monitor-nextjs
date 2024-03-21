@@ -1,3 +1,4 @@
+import { hashPassword } from '../../../lib/auth'
 import { transporter } from '../../../lib/mailer'
 import { connectToDatabase } from '../../../lib/mongodb'
 
