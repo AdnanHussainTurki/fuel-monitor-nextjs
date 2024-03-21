@@ -14,11 +14,14 @@ export default function Home() {
     const passwordInputRef = useRef()
     const router = useRouter()
     useEffect(() => {
+        router.replace('/auth/forgot')
+    })
+    useEffect(() => {
         getSession().then((session) => {
             if (session) {
                 router.replace('/')
             } else {
-                setIsLoading(false)
+                setIsLoading(true) // Loading while redirecting
             }
         })
     }, [router])

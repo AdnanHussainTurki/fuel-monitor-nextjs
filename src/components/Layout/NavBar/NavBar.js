@@ -98,7 +98,7 @@ export default function NavBar() {
                                     <div className="rounded-md ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                         <form
                                             method="POST"
-                                            action="https://ledger.myphpnotes.com/logout"
+                                            action="https://fuelmonitor.myphpnotes.com/logout"
                                         >
                                             <input
                                                 type="hidden"
