@@ -11,9 +11,10 @@ async function handler(req, res) {
     const existingUser = await db
         .collection('users')
         .findOne({ email: email, loginCode: code })
-
+    client.close()
     if (!existingUser) {
         res.status(401).json({ status: false, message: 'Invalid code' })
+
         return
     }
 

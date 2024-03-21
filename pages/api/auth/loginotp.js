@@ -49,6 +49,7 @@ async function handler(req, res) {
         text: 'Hi!', // plain text body
         html: 'Hi,<br> Your login code is <b>' + randomFourDigit + '</b>.', // html body
     })
+    client.close()
 
     if (!!info) {
         res.status(200).json({ success: true })
