@@ -13,12 +13,9 @@ async function handler(req, res) {
         res.status(401).json({ message: 'Not authenticated!' })
         return
     }
-    const rid = req.query.rid;
-    
-    
-    if (
-        !rid
-    ) {
+    const rid = req.query.rid
+
+    if (!rid) {
         res.status(422).json({
             message: 'Invalid input.',
         })
@@ -28,16 +25,21 @@ async function handler(req, res) {
     const userEmail = session.user.email
     const client = await connectToDatabase()
     const db = await client.db()
-     })
+
     const existing = await db
         .collection('refuels')
-        .findOne({ _id: ObjectId(rid), "user_email": userEmail })
+        .findOne({ _id: ObjectId(rid), user_email: userEmail })
     if (!existing) {
         res.status(422).json({ message: 'Refuel record not found!' })
         client.close()
         return
     }
     client.close()
-    res.status(201).json({ message: 'Required Refueling Pulled!', refuel: existing, rid: rid, email: userEmail })
+    res.status(201).json({
+        message: 'Required Refueling Pulled!',
+        refuel: existing,
+        rid: rid,
+        email: userEmail,
+    })
 }
 export default handler
