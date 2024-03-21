@@ -55,6 +55,14 @@ export default function Home() {
         setIsCreating(true)
         const enteredEmail = emailInputRef.current.value
 
+        if (!enteredEmail) {
+            toast.error('Please enter a valid email address.', {
+                position: 'bottom-center',
+            })
+            setIsCreating(false)
+            return
+        }
+
         try {
             const result = await sendPasswordResetInstructions(enteredEmail)
             if (!!result.success) {
@@ -68,6 +76,14 @@ export default function Home() {
         setIsVerifying(true)
         const enteredEmail = emailInputRef.current.value
         const enteredPassword = passwordInputRef.current.value
+
+        if (!enteredEmail || !enteredPassword) {
+            toast.error('Please enter a valid email and OTP.', {
+                position: 'bottom-center',
+            })
+            setIsVerifying(false)
+            return
+        }
 
         try {
             const result = await loginByCode(enteredEmail, enteredPassword)
