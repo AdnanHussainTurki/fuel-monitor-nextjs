@@ -1,6 +1,5 @@
 import { getServerSession } from 'next-auth'
 import { connectToDatabase } from '../../../lib/mongodb'
-import { getServerSession } from 'next-auth'
 
 async function handler(req, res) {
     if (req.method !== 'POST') {

@@ -53,6 +53,7 @@ export default function add() {
     }, [router])
 
     const changeBrands = () => {
+        setIsLoading(true)
         const type = typeInputRef.current.value
 
         if (type.toLowerCase() === 'car') {
@@ -65,6 +66,7 @@ export default function add() {
             )
         }
         setBrandJson({})
+        setIsLoading(false)
     }
 
     const submitHandler = async (event) => {

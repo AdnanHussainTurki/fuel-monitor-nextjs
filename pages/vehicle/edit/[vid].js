@@ -216,10 +216,8 @@ export default function edit() {
             s.vehicles = s.vehicles.filter((vehicle) => vehicle._id !== vid)
         })
         if (vehicleStore.refuels[vid]) {
-            RefuelStore.update((s) => {
-                s.refuels = s.refuels.filter(
-                    (refuel) => refuel.data.vid !== vid
-                )
+            VehicleStore.update((s) => {
+                delete s.refuels[vid]
             })
         }
 
