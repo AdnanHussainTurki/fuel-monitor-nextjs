@@ -14,10 +14,10 @@ async function handler(req, res) {
     client.close()
     if (!existingUser) {
         res.status(401).json({ status: false, message: 'Invalid code' })
-
         return
     }
 
     res.status(200).json({ success: false })
+    return
 }
 export default handler
